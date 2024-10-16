@@ -9,13 +9,13 @@ import java.util.Scanner;
 
 public class Reports {
     private static ArrayList<Ledger> ledgers = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
 
-  public Reports() {
+    public Reports() {
       loadTransaction();
   }
     public void generateReports() {
 
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("""
                 1) Month to Date
@@ -46,7 +46,7 @@ public class Reports {
                 generatePreviousYear();
                 break;
             case 5:
-
+                search();
                 break;
             case 0:
             default:
@@ -120,41 +120,54 @@ public class Reports {
         System.out.printf("Total for Previous Year (%d): %.2f\n", previousYear, total);
   }
 
-    private static void loadTransaction() {
+  private static void search() {
+      System.out.println("Search for vendor: ");
+      String vendorInput = scanner.nextLine();
+      for (Ledger ledger : ledgers) {
 
-        try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+          if (vendorInput.equalsIgnoreCase(ledger.getVendor())) {
+              System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                      ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
 
-                bufferedReader.readLine();
+          }
+      }
+  }
 
-                String input;
-                while ((input = bufferedReader.readLine()) != null) {
-                    String[] ledgerParts = input.split("\\|");
-                    if (ledgerParts.length < 5) {
-                        continue; // Skip invalid entries
-                    }
-                    String date = ledgerParts[0];
-                    String time = ledgerParts[1];
-                    String description = ledgerParts[2];
-                    String vendor = ledgerParts[3];
-                    double amount;
-                    try {
-                        amount = Double.parseDouble(ledgerParts[4]);
-                    } catch (NumberFormatException e) {
-                        continue;
-                    }
-                    Ledger ledger = new Ledger(date, time, description, vendor, amount);
-                    ledgers.add(ledger);
+      private static void loadTransaction () {
 
-                }
+          try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
+              BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+              bufferedReader.readLine();
+
+              String input;
+              while ((input = bufferedReader.readLine()) != null) {
+                  String[] ledgerParts = input.split("\\|");
+                  if (ledgerParts.length < 5) {
+                      continue; // Skip invalid entries
+                  }
+                  String date = ledgerParts[0];
+                  String time = ledgerParts[1];
+                  String description = ledgerParts[2];
+                  String vendor = ledgerParts[3];
+                  double amount;
+                  try {
+                      amount = Double.parseDouble(ledgerParts[4]);
+                  } catch (NumberFormatException e) {
+                      continue;
+                  }
+                  Ledger ledger = new Ledger(date, time, description, vendor, amount);
+                  ledgers.add(ledger);
+
+              }
 
 
-            bufferedReader.close();
-        } catch (IOException e) {
+              bufferedReader.close();
+          } catch (IOException e) {
 
-            throw new RuntimeException(e);
-        }
-    }
+              throw new RuntimeException(e);
+          }
+      }
 
 
-}
+  }
