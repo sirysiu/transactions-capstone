@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class TransactionApp {
 
     static Scanner scanner = new Scanner(System.in);
-    private static ArrayList<Ledger> ledgers = new ArrayList<>();
-    // static Ledger ledger;
+    static ArrayList<Transaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) throws FileNotFoundException {
         loadTransaction();
@@ -68,11 +67,11 @@ public class TransactionApp {
                 } catch (NumberFormatException e) {
                     continue;
                 }
-                Ledger ledger = new Ledger(date, time, description, vendor, amount);
-                ledgers.add(ledger);
+                Transaction transaction = new Transaction(date, time, description, vendor, amount);
+                transactions.add(transaction);
 
             }
-            bufferedReader.close();
+           // bufferedReader.close();
         } catch (IOException e) {
 
             throw new RuntimeException(e);
@@ -80,9 +79,9 @@ public class TransactionApp {
     }
 
     private static void displayTransaction() throws FileNotFoundException {
-        for (Ledger ledger : ledgers) {
+        for (Transaction transaction : transactions) {
             System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                    ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+                    transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
         }
 
         System.out.println("""
@@ -112,20 +111,20 @@ public class TransactionApp {
 
     private static void displayDeposits() {
         System.out.println("Deposits:");
-        for (Ledger ledger : ledgers) {
-            if (ledger.getAmount() > 0) {
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() > 0) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
             }
         }
     }
 
     private static void displayPayments() {
         System.out.println("Payments:");
-        for (Ledger ledger : ledgers) {
-            if (ledger.getAmount() < 0) {
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() < 0) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
             }
         }
     }
@@ -145,12 +144,12 @@ public class TransactionApp {
         scanner.nextLine(); // Consume newline
 
 
-        Ledger newLedger = new Ledger(formattedDate, formattedTime, description, vendor, amount);
-        ledgers.add(newLedger);
+        Transaction newTransaction = new Transaction(formattedDate, formattedTime, description, vendor, amount);
+        transactions.add(newTransaction);
         System.out.println("Deposit added");
 
 
-            saveTransactions(newLedger);
+            saveTransactions(newTransaction);
 
     }
 
@@ -170,24 +169,20 @@ public class TransactionApp {
         scanner.nextLine(); // Consume newline
 
 
-        Ledger newLedger = new Ledger(formattedDate, formattedTime, description, vendor, -amount);
-        ledgers.add(newLedger);
+        Transaction newTransaction = new Transaction(formattedDate, formattedTime, description, vendor, -amount);
+        transactions.add(newTransaction);
         System.out.println("Payment added");
 
 
-            saveTransactions(newLedger);
+            saveTransactions(newTransaction);
 
     }
 
-    private static void saveTransactions(Ledger ledger) {
+    private static void saveTransactions(Transaction transaction) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/resources/transactions.csv", true))) {
-           // for (Ledger ledger : ledgers ) {
             writer.write(String.format("%s|%s|%s|%s|%.2f%n",
-                    ledger.getDate(), ledger.getTime(),
-                    ledger.getDescription(), ledger.getVendor(), ledger.getAmount()));
-
-
-           // }
+                    transaction.getDate(), transaction.getTime(),
+                    transaction.getDescription(), transaction.getVendor(), transaction.getAmount()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

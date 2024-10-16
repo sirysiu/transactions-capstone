@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Reports {
-    private static ArrayList<Ledger> ledgers = new ArrayList<>();
+    private static ArrayList<Transaction> ledger = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     public Reports() {
@@ -61,11 +61,11 @@ public class Reports {
         LocalDate now = LocalDate.now();
         System.out.println("Transactions for the current month (" + now.getMonth() + "):");
 
-        for (Ledger ledger : ledgers) {
-            if (ledger.getDate().startsWith(now.getYear() + "-" + String.format("%02d", now.getMonthValue()))) {
+        for (Transaction transaction : ledger) {
+            if (transaction.getDate().startsWith(now.getYear() + "-" + String.format("%02d", now.getMonthValue()))) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
-                total += ledger.getAmount();
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                total += transaction.getAmount();
             }
         }
 
@@ -77,11 +77,11 @@ public class Reports {
         LocalDate lastMonth = LocalDate.now().minusMonths(1);
         System.out.println("Transactions for the previous month (" + lastMonth.getMonth() + "):");
 
-        for (Ledger ledger : ledgers) {
-            if (ledger.getDate().startsWith(lastMonth.getYear() + "-" + String.format("%02d", lastMonth.getMonthValue()))) {
+        for (Transaction transaction : ledger) {
+            if (transaction.getDate().startsWith(lastMonth.getYear() + "-" + String.format("%02d", lastMonth.getMonthValue()))) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
-                total += ledger.getAmount();
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                total += transaction.getAmount();
             }
         }
 
@@ -93,11 +93,11 @@ public class Reports {
         int currentYear = LocalDate.now().getYear();
         System.out.println("Transactions for the current year (" + currentYear + "):");
 
-        for (Ledger ledger : ledgers) {
-            if (ledger.getDate().startsWith(String.valueOf(currentYear))) {
+        for (Transaction transaction : ledger) {
+            if (transaction.getDate().startsWith(String.valueOf(currentYear))) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
-                total += ledger.getAmount();
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                total += transaction.getAmount();
             }
         }
 
@@ -109,11 +109,11 @@ public class Reports {
         int previousYear = LocalDate.now().getYear() - 1;
         System.out.println("Transactions for the previous year (" + previousYear + "):");
 
-        for (Ledger ledger : ledgers) {
-            if (ledger.getDate().startsWith(String.valueOf(previousYear))) {
+        for (Transaction transaction : ledger) {
+            if (transaction.getDate().startsWith(String.valueOf(previousYear))) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
-                total += ledger.getAmount();
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                total += transaction.getAmount();
             }
         }
 
@@ -123,11 +123,10 @@ public class Reports {
   private static void search() {
       System.out.println("Search for vendor: ");
       String vendorInput = scanner.nextLine();
-      for (Ledger ledger : ledgers) {
-
-          if (vendorInput.equalsIgnoreCase(ledger.getVendor())) {
+      for (Transaction transaction : ledger) {
+          if (vendorInput.equalsIgnoreCase(transaction.getVendor())) {
               System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                      ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+                      transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
 
           }
       }
@@ -156,8 +155,8 @@ public class Reports {
                   } catch (NumberFormatException e) {
                       continue;
                   }
-                  Ledger ledger = new Ledger(date, time, description, vendor, amount);
-                  ledgers.add(ledger);
+                  Transaction transaction = new Transaction(date, time, description, vendor, amount);
+                  ledger.add(transaction);
 
               }
 

@@ -1,18 +1,15 @@
 package com.plurualsight.transaction;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
-public class Ledger {
+public class Transaction {
     private String date;
     private String time;
     private String description;
     private String vendor;
     private double amount;
 
-    public Ledger(String date, String time, String description, String vendor, double amount) throws FileNotFoundException {
+    public Transaction(String date, String time, String description, String vendor, double amount) throws FileNotFoundException {
         this.date = date;
         this.time = time;
         this.description = description;
