@@ -44,7 +44,8 @@ public class TransactionApp {
         }
     }
 
-    private static void displayTransaction() {
+    private static void loadTransaction() {
+
         try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
             {
@@ -65,9 +66,7 @@ public class TransactionApp {
                         continue;
                     }
                     Ledger ledger = new Ledger(date, time, description, vendor, amount);
-                    System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                            ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
-
+                    ledgers.add(ledger);
 
                 }
 
@@ -78,6 +77,58 @@ public class TransactionApp {
         throw new RuntimeException(e);
     }
 }
+
+private static void displayTransaction() throws FileNotFoundException {
+        loadTransaction();
+        for (Ledger ledger : ledgers) {
+            System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                    ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+        }
+
+    System.out.println("""
+            
+            Filter by [d] Deposit || Payments [p] || Reports [r]
+        
+            """);
+        String ledgerInput = scanner.nextLine();
+
+        switch (ledgerInput) {
+            case "d", "D":
+                displayDeposits();
+                break;
+            case "p", "P":
+                displayPayments();
+                break;
+            case "r","R":
+                Reports report = new Reports();
+                report.generateReports();
+                break;
+            default:
+                System.out.println("Invalid return to main");
+        }
+
+
+}
+
+private static void displayDeposits() {
+    System.out.println("Deposits:");
+    for (Ledger ledger : ledgers) {
+        if (ledger.getAmount() > 0) {
+            System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                    ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+        }
+    }
+}
+
+private static void displayPayments() {
+        System.out.println("Payments:");
+        for (Ledger ledger : ledgers) {
+            if (ledger.getAmount() < 0){
+                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                        ledger.getDate(), ledger.getTime(), ledger.getDescription(), ledger.getVendor(), ledger.getAmount());
+            }
+        }
+    }
 
     private static void addingDeposit() throws FileNotFoundException {
         LocalDateTime today = LocalDateTime.now();
