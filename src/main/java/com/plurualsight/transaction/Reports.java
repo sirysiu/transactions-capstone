@@ -124,13 +124,15 @@ public class Reports {
 
         try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            {
+
                 bufferedReader.readLine();
 
                 String input;
                 while ((input = bufferedReader.readLine()) != null) {
                     String[] ledgerParts = input.split("\\|");
-                    if (ledgerParts.length < 5);
+                    if (ledgerParts.length < 5) {
+                        continue; // Skip invalid entries
+                    }
                     String date = ledgerParts[0];
                     String time = ledgerParts[1];
                     String description = ledgerParts[2];
@@ -146,7 +148,7 @@ public class Reports {
 
                 }
 
-            }
+
             bufferedReader.close();
         } catch (IOException e) {
 
