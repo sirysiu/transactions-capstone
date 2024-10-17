@@ -8,25 +8,28 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Reports {
-    private static ArrayList<Transaction> ledger = new ArrayList<>();
+    static ArrayList<Transaction> ledger = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     public Reports() {
-      loadTransaction();
-  }
+        loadTransaction();
+    }
+
     public void generateReports() {
 
-
+// prompt will be shown after user input r in the transactionApp ledger prompt
         System.out.println("""
-                1) Month to Date
-                2) Previous Month
-                3) Year to Date
-                4) Previous Year
-                5) Search by Vendor
-                0) Back to Reports
                 
-                
-                
+                ╔═══════════════════════════════════╗
+                ║            Report Options         ║
+                ╠═══════════════════════════════════╣
+                ║ 1) Month to Date                  ║
+                ║ 2) Previous Month                 ║
+                ║ 3) Year to Date                   ║
+                ║ 4) Previous Year                  ║
+                ║ 5) Search More...                 ║
+                ║ 0) Back to Homepage               ║
+                ╚═══════════════════════════════════╝
                 """);
 
         int input = scanner.nextInt();
@@ -34,19 +37,19 @@ public class Reports {
 
         switch (input) {
             case 1:
-                monthToDate();
+                monthToDate(); // generate the current month
                 break;
             case 2:
                 generatePreviousMonth();
                 break;
             case 3:
-                generateYearToDate();
+                generateYearToDate(); // generate the current year
                 break;
             case 4:
                 generatePreviousYear();
                 break;
             case 5:
-                search();
+                search(); // allow the user to search by vendor
                 break;
             case 0:
             default:
@@ -57,15 +60,15 @@ public class Reports {
 
 
     private static void monthToDate() {
-        double total = 0.0;
-        LocalDate now = LocalDate.now();
+        double total = 0.0; // The double data type will hold total amounts
+        LocalDate now = LocalDate.now(); // get the current date
         System.out.println("Transactions for the current month (" + now.getMonth() + "):");
 
-        for (Transaction transaction : ledger) {
+        for (Transaction transaction : ledger) { // find the transaction within the current month
             if (transaction.getDate().startsWith(now.getYear() + "-" + String.format("%02d", now.getMonthValue()))) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
                         transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
-                total += transaction.getAmount();
+                total += transaction.getAmount(); // will add the total within the current month
             }
         }
 
@@ -74,7 +77,7 @@ public class Reports {
 
     private void generatePreviousMonth() {
         double total = 0.0;
-        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);// Gets the date for previous month
         System.out.println("Transactions for the previous month (" + lastMonth.getMonth() + "):");
 
         for (Transaction transaction : ledger) {
@@ -118,55 +121,68 @@ public class Reports {
         }
 
         System.out.printf("Total for Previous Year (%d): %.2f\n", previousYear, total);
-  }
+    }
 
-  private static void search() {
-      System.out.println("Search for vendor: ");
-      String vendorInput = scanner.nextLine();
-      for (Transaction transaction : ledger) {
-          if (vendorInput.equalsIgnoreCase(transaction.getVendor())) {
-              System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                      transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+    // method for user to search by vendor input
+    private static void search() {
+        System.out.println("Search: ");
+        String input = scanner.nextLine();
+        for (Transaction transaction : ledger) {
 
-          }
-      }
-  }
+            if (input.equalsIgnoreCase(transaction.getVendor())) {
+                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
 
-      private static void loadTransaction () {
+            } else if (input.equalsIgnoreCase(transaction.getDate())) {
+                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
 
-          try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
-              BufferedReader bufferedReader = new BufferedReader(fileReader);
+            } else if (input.trim().equalsIgnoreCase(transaction.getDescription())) {
+                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
 
-              bufferedReader.readLine();
+//            }  else if (transaction.getAmount() == Double.parseDouble(input.trim())) {
+//                    System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+//                            transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+//
+//            }  if user is able to search by amounts
 
-              String input;
-              while ((input = bufferedReader.readLine()) != null) {
-                  String[] ledgerParts = input.split("\\|");
-                  if (ledgerParts.length < 5) {
-                      continue; // Skip invalid entries
-                  }
-                  String date = ledgerParts[0];
-                  String time = ledgerParts[1];
-                  String description = ledgerParts[2];
-                  String vendor = ledgerParts[3];
-                  double amount;
-                  try {
-                      amount = Double.parseDouble(ledgerParts[4]);
-                  } catch (NumberFormatException e) {
-                      continue;
-                  }
-                  Transaction transaction = new Transaction(date, time, description, vendor, amount);
-                  ledger.add(transaction);
+            }
 
-              }
+        }
+
+    }
+    private static void loadTransaction() {
+
+        try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            bufferedReader.readLine();
+
+            String input;
+            while ((input = bufferedReader.readLine()) != null) {
+                String[] ledgerParts = input.split("\\|");
+                if (ledgerParts.length < 5) {
+                    continue; // Skip invalid entries
+                }
+                String date = ledgerParts[0];
+                String time = ledgerParts[1];
+                String description = ledgerParts[2];
+                String vendor = ledgerParts[3];
+                double amount = Double.parseDouble(ledgerParts[4]);
+
+                Transaction transaction = new Transaction(date, time, description, vendor, amount);
+                ledger.add(transaction);
+
+            }
 
 
-              bufferedReader.close();
-          } catch (IOException e) {
+            bufferedReader.close();
+        } catch (IOException e) {
 
-              throw new RuntimeException(e);
-          }
-      }
+            throw new RuntimeException(e);
+        }
+    }
 
 
-  }
+}
