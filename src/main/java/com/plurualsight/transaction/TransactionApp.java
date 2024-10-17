@@ -19,8 +19,9 @@ public class TransactionApp {
         while (isRunning) {
             // The users first prompt
             System.out.println("""
-                    
-                    ╔═══════════════════════════════╗
+                
+                
+                    ╔════════════❀•°❀°•❀════════════╗
                     ║          Home Screen          ║
                     ╠═══════════════════════════════╣
                     ║ D) Add Deposit                ║
@@ -36,7 +37,7 @@ public class TransactionApp {
                     addingDeposit(); // When user input d they will be able to add any deposits
                     break;
                 case "l", "L":
-                    displayTransaction(); // When user input L display all transactions
+                    ledgerScreen(); // When user input L display all transactions
                     break;
                 case "p", "P":
                     makePayment(); // When user input p they will be allowed to add a payment
@@ -77,45 +78,61 @@ public class TransactionApp {
         }
     }
 
-    private static void displayTransaction() throws FileNotFoundException {
-        for (Transaction transaction : transactions) { //Grab all the object from the array list and put in a loop to print out all list of transaction
-            System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                    transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
-        }
+    private static void ledgerScreen() {
+
 // ******** This will Prompt the user to be able to filter by payment of deposits only
-        System.out.println("""
+        boolean isRunning = true;
+        while (isRunning) {
+            System.out.println("""
                 
                 ╔════════════════════════════════════╗
-                ║           Filter Options           ║
+                ║           Ledger Screen            ║
                 ╠════════════════════════════════════╣
+                ║ [A] Display all transaction        ║
                 ║ [D] Deposit                        ║
                 ║ [P] Payments                       ║
                 ║ [R] Reports                        ║
+                ║ [X] Back To Homepage               ║
                 ╚════════════════════════════════════╝
                 """);
-        String ledgerInput = scanner.nextLine();
+            String ledgerInput = scanner.nextLine();
 
-        switch (ledgerInput) {
-            case "d", "D":
-                displayDeposits(); // displaying amount that are positive
-                break;
-            case "p", "P":
-                displayPayments(); // display in amount that are negative
-                break;
-            case "r", "R":
-                Reports report = new Reports();
-                report.generateReports(); // allow user to view the transaction by dates
-                break;
-            default:
-                System.out.println("Invalid return to main");
+            switch (ledgerInput) {
+                case "A", "a":
+                    displayTransaction();
+                    break;
+                case "d", "D":
+                    displayDeposits(); // displaying amount that are positive
+                    break;
+                case "p", "P":
+                    displayPayments(); // display in amount that are negative
+                    break;
+                case "r", "R":
+                    Reports report = new Reports();
+                    report.generateReports(); // allow user to view the transaction by dates
+                    break;
+                case "x", "X":
+                default:
+                    // System.out.println("Invalid return to main");
+                    isRunning = false;
+            }
         }
-
+    }
+    private static void displayTransaction() {
+        int size = transactions.size(); // grab the size of the transaction list
+        for (int i = size - 1; i >= 0; i--) { // reverse the order
+            Transaction transaction = transactions.get(i);
+            System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
+                    transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+        }
 
     }
 
     private static void displayDeposits() {
         System.out.println("Deposits:");
-        for (Transaction transaction : transactions) { // calling the arraylist
+        int size = transactions.size();
+        for (int i = size - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
             if (transaction.getAmount() > 0) {          // to find amount that are more than 0 or positive will only print out deposits
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
                         transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
@@ -125,7 +142,9 @@ public class TransactionApp {
 
     private static void displayPayments() {
         System.out.println("Payments:");
-        for (Transaction transaction : transactions) {
+        int size = transactions.size();
+        for (int i = size - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
             if (transaction.getAmount() < 0) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
                         transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
@@ -193,4 +212,5 @@ public class TransactionApp {
             throw new RuntimeException(e);
         }
     }
+
 }

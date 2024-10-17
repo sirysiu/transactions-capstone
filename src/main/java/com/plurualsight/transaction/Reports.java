@@ -18,43 +18,47 @@ public class Reports {
     public void generateReports() {
 
 // prompt will be shown after user input r in the transactionApp ledger prompt
-        System.out.println("""
-                
-                ╔═══════════════════════════════════╗
-                ║            Report Options         ║
-                ╠═══════════════════════════════════╣
-                ║ 1) Month to Date                  ║
-                ║ 2) Previous Month                 ║
-                ║ 3) Year to Date                   ║
-                ║ 4) Previous Year                  ║
-                ║ 5) Search More...                 ║
-                ║ 0) Back to Homepage               ║
-                ╚═══════════════════════════════════╝
-                """);
+        boolean isRunning = true;
+        while (isRunning) {
+            System.out.println("""
+                    
+                    ╔═══════════════════════════════════╗
+                    ║          Report Options           ║
+                    ╠═══════════════════════════════════╣
+                    ║ 1) Month to Date                  ║
+                    ║ 2) Previous Month                 ║
+                    ║ 3) Year to Date                   ║
+                    ║ 4) Previous Year                  ║
+                    ║ 5) Search More...                 ║
+                    ║ 0) Back to Homepage               ║
+                    ╚═══════════════════════════════════╝
+                    """);
 
-        int input = scanner.nextInt();
-        scanner.nextLine();
+            int input = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (input) {
-            case 1:
-                monthToDate(); // generate the current month
-                break;
-            case 2:
-                generatePreviousMonth();
-                break;
-            case 3:
-                generateYearToDate(); // generate the current year
-                break;
-            case 4:
-                generatePreviousYear();
-                break;
-            case 5:
-                search(); // allow the user to search by vendor
-                break;
-            case 0:
-            default:
+            switch (input) {
+                case 1:
+                    monthToDate(); // generate the current month
+                    break;
+                case 2:
+                    generatePreviousMonth();
+                    break;
+                case 3:
+                    generateYearToDate(); // generate the current year
+                    break;
+                case 4:
+                    generatePreviousYear();
+                    break;
+                case 5:
+                    search(); // allow the user to search by vendor
+                    break;
+                case 0:
+                default:
+                    isRunning = false;
 
 
+            }
         }
     }
 
@@ -140,12 +144,6 @@ public class Reports {
             } else if (input.trim().equalsIgnoreCase(transaction.getDescription())) {
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
                         transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
-
-//            }  else if (transaction.getAmount() == Double.parseDouble(input.trim())) {
-//                    System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-//                            transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
-//
-//            }  if user is able to search by amounts
 
             }
 
