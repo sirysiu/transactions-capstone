@@ -9,6 +9,7 @@ public class Transaction {
     private String vendor;
     private double amount;
 
+    // Constructor to initialize a new Transaction object
     public Transaction(String date, String time, String description, String vendor, double amount) throws FileNotFoundException {
         this.date = date;
         this.time = time;

@@ -131,8 +131,8 @@ public class TransactionApp {
     private static void displayDeposits() {
         System.out.println("Deposits:");
         int size = transactions.size();
-        for (int i = size - 1; i >= 0; i--) {
-            Transaction transaction = transactions.get(i);
+        for (int i = size - 1; i >= 0; i--) { // reverse the order with -1. decrement with i--
+            Transaction transaction = transactions.get(i); //transaction variable is assign the transaction array list
             if (transaction.getAmount() > 0) {          // to find amount that are more than 0 or positive will only print out deposits
                 System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
                         transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
