@@ -124,7 +124,7 @@ public class ReportsController {
         System.out.print("Enter description (Press enter to skip): ");
         String description = scan.nextLine();
 
-        System.out.print("Enter amount (Press enter to skip): ");
+        System.out.print("Enter amount (Press enter to skip): \n");
         String amount = scan.nextLine();
 
         if(amount.isEmpty()){
