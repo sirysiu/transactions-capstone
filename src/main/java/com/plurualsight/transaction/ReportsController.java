@@ -99,12 +99,12 @@ public class ReportsController {
 
     }
 
-    public ArrayList loadTransaction() {
+    public ArrayList<Transaction> loadTransaction() {
         ArrayList<Transaction> ledger = new ArrayList<>();
         try (FileReader fileReader = new FileReader("./src/main/resources/transactions.csv")) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            bufferedReader.readLine();
+            bufferedReader.readLine(); // Skip the header line, assuming there's one in the CSV file
 
             String input;
             while ((input = bufferedReader.readLine()) != null) {
@@ -118,19 +118,20 @@ public class ReportsController {
                 String vendor = ledgerParts[3];
                 double amount = Double.parseDouble(ledgerParts[4]);
 
+                // Create and add the transaction to the ledger list
                 Transaction transaction = new Transaction(date, time, description, vendor, amount);
                 ledger.add(transaction);
-
-                return ledger;
             }
-
 
             bufferedReader.close();
         } catch (IOException e) {
-
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException("Error reading the transactions file.", e);
         }
+
+        // Return the populated ledger list after reading all lines
         return ledger;
     }
+
 
 }
