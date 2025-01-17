@@ -170,7 +170,7 @@ public class TransactionApp {
 
         Transaction newTransaction = new Transaction(formattedDate, formattedTime, description, vendor, amount);
         transactions.add(newTransaction);  // will add new object made in addingDeposits to the Arraylist
-        System.out.println("Deposit added");
+        System.out.println("=> Deposit added");
 
 
         saveTransactions(newTransaction); // this will allow the new user input to be saved in the csv file
@@ -178,7 +178,6 @@ public class TransactionApp {
     }
 
     private static void makePayment() throws FileNotFoundException {
-
         LocalDateTime today = LocalDateTime.now();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = today.format(fmt);
@@ -196,7 +195,7 @@ public class TransactionApp {
 
         Transaction newTransaction = new Transaction(formattedDate, formattedTime, description, vendor, -amount);
         transactions.add(newTransaction);
-        System.out.println("Payment added");
+        System.out.println("=> Payment added");
 
 
         saveTransactions(newTransaction);

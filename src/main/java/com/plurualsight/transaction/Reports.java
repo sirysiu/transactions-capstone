@@ -60,7 +60,7 @@ public class Reports {
 
             }
         }
-    }
+    }//generate the reports screen
 
 
     private static void monthToDate() {
