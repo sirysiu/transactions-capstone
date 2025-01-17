@@ -59,7 +59,4 @@ public class Reports {
                     isRunning = false;
 
 
-            }
-        }
-    }
 }
