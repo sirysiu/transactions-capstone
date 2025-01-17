@@ -184,7 +184,7 @@ public class TransactionApp {
         String formattedDate = today.format(fmt);
         DateTimeFormatter timefmt = DateTimeFormatter.ofPattern("HH:mm:ss");
         String formattedTime = today.format(timefmt);
-        // prompt uesr to add new payment objects
+        // prompt user to add new payment objects
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
         System.out.print("Enter vendor: ");
