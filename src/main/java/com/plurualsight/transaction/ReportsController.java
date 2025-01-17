@@ -88,6 +88,7 @@ public class ReportsController {
 
         System.out.printf("\nYear-to-Date Total for %d: %s\n", currentYear, formatAmount(total));
     }
+
     public void generatePreviousYear() {
         double total = 0.0;
         int previousYear = LocalDate.now().getYear() - 1;
@@ -110,27 +111,36 @@ public class ReportsController {
     }
 
     // method for user to search by vendor input
-    public void search() {
-        System.out.println("Search: ");
-        String input = scan.nextLine();
-        for (Transaction transaction : ledger) {
+    public void customSearchView() {
+        System.out.print("Enter vendor (Press enter to skip): ");
+        String vendor = scan.nextLine();
 
-            if (input.equalsIgnoreCase(transaction.getVendor())) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.print("Enter start date (Press enter to skip): ");
+        String startDate = scan.nextLine();
 
-            } else if (input.equalsIgnoreCase(transaction.getDate())) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.print("Enter end date (Press enter to skip): ");
+        String endDate = scan.nextLine();
 
-            } else if (input.trim().equalsIgnoreCase(transaction.getDescription())) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.print("Enter description (Press enter to skip): ");
+        String description = scan.nextLine();
 
-            }
+        System.out.print("Enter amount (Press enter to skip): ");
+        double amount = scan.nextDouble();
+        scan.nextLine();
 
+        double total = 0;
+        ArrayList<Transaction> filteredLedger = new CustomSearchController(ledger).search(vendor, startDate, endDate, description, amount);
+        for (Transaction transaction : filteredLedger) {
+
+            System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
+                    formatDate(transaction.getDate()),
+                    transaction.getTime(),
+                    transaction.getDescription(),
+                    transaction.getVendor(),
+                    formatAmount(transaction.getAmount()));
+            total += transaction.getAmount();
         }
-
+        System.out.printf("\nTotal for your search: %s\n", formatAmount(total));
     }
 
     public ArrayList<Transaction> loadTransaction() {

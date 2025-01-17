@@ -19,11 +19,11 @@ public class CustomSearchController {
         description
         amount
          */
-        ledger.stream().filter(t -> vendor == null || t.getVendor().contains(vendor))
-                .filter((t -> startDate == null || LocalDate.parse(t.getDate()).isAfter(LocalDate.parse(startDate))))
-                .filter(t -> endDate == null || LocalDate.parse(t.getDate()).isBefore(LocalDate.parse(endDate)))
-                .filter(t -> description == null || t.getDescription().contains(description))
-                .filter(t-> amount == 0.0 || t.getAmount() == amount)
+        ledger.stream().filter(t -> vendor.isEmpty() || t.getVendor().contains(vendor))
+                .filter((t -> startDate.isEmpty() || LocalDate.parse(t.getDate()).isAfter(LocalDate.parse(startDate))))
+                .filter(t -> endDate.isEmpty() || LocalDate.parse(t.getDate()).isBefore(LocalDate.parse(endDate)))
+                .filter(t -> description.isEmpty() || t.getDescription().contains(description))
+                .filter(t-> amount ==  0|| t.getAmount() == amount)
                 .forEach(t -> newLedger.add(t));
 
         return newLedger;

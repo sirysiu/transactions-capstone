@@ -50,7 +50,7 @@ public class Reports {
                     rc.generatePreviousYear();
                     break;
                 case 5:
-                    rc.search(); // allow the user to search by vendor
+                    rc.customSearchView(); // allow the user to search by vendor
                     break;
                 case 0:
                 default:
