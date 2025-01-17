@@ -125,11 +125,14 @@ public class ReportsController {
         String description = scan.nextLine();
 
         System.out.print("Enter amount (Press enter to skip): ");
-        double amount = scan.nextDouble();
-        scan.nextLine();
+        String amount = scan.nextLine();
+
+        if(amount.isEmpty()){
+            amount = "0.00";
+        }
 
         double total = 0;
-        ArrayList<Transaction> filteredLedger = new CustomSearchController(ledger).search(vendor, startDate, endDate, description, amount);
+        ArrayList<Transaction> filteredLedger = new CustomSearchController(ledger).search(vendor, startDate, endDate, description, Double.parseDouble(amount));
         for (Transaction transaction : filteredLedger) {
 
             System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
