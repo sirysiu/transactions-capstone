@@ -31,8 +31,6 @@ public class Reports {
                     ║ 5) Search More...                 ║
                     ║ 0) Back to Homepage               ║
                     ╚═══════════════════════════════════╝
-                    
-                    Hello World!
                     """);
 
             int input = scanner.nextInt();
@@ -59,4 +57,7 @@ public class Reports {
                     isRunning = false;
 
 
+            }
+        }
+    }
 }
