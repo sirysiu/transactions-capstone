@@ -11,68 +11,102 @@ public class ReportsController {
     ArrayList<Transaction> ledger = loadTransaction();
     Scanner scan = new Scanner(System.in);
 
-    public void monthToDate() {
-        double total = 0.0; // The double data type will hold total amounts
-        LocalDate now = LocalDate.now(); // get the current date
-        System.out.println("Transactions for the current month (" + now.getMonth() + "):");
-
-        for (Transaction transaction : ledger) { // find the transaction within the current month
-            if (transaction.getDate().startsWith(now.getYear() + "-" + String.format("%02d", now.getMonthValue()))) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
-                total += transaction.getAmount(); // will add the total within the current month
-            }
-        }
-
-        System.out.printf("Month-to-Date Total for %s: %.2f\n", now.getMonth(), total);
+    // Utility function to format the date and amount
+    private String formatDate(String date) {
+        return date.replace("-", "/"); // Convert date from yyyy-MM-dd to yyyy/MM/dd format
     }
 
-    public void generatePreviousMonth() {
+    private String formatAmount(double amount) {
+        return String.format("%.2f", amount); // Format the amount to 2 decimal places
+    }
+
+    // Print header row for transaction table
+    private void printTransactionHeader() {
+        System.out.printf("%-15s %-8s %-30s %-15s %-10s\n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-------------------------------------------------------------");
+    }
+
+    public void monthToDate() {
         double total = 0.0;
-        LocalDate lastMonth = LocalDate.now().minusMonths(1);// Gets the date for previous month
-        System.out.println("Transactions for the previous month (" + lastMonth.getMonth() + "):");
+        LocalDate now = LocalDate.now();
+        System.out.println("\nTransactions for the current month (" + now.getMonth() + "):");
+        printTransactionHeader();
 
         for (Transaction transaction : ledger) {
-            if (transaction.getDate().startsWith(lastMonth.getYear() + "-" + String.format("%02d", lastMonth.getMonthValue()))) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+            if (transaction.getDate().startsWith(now.getYear() + "-" + String.format("%02d", now.getMonthValue()))) {
+                System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
+                        formatDate(transaction.getDate()),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        formatAmount(transaction.getAmount()));
                 total += transaction.getAmount();
             }
         }
 
-        System.out.printf("Total for Previous Month (%s): %.2f\n", lastMonth.getMonth(), total);
+        System.out.printf("\nMonth-to-Date Total for %s: %s\n", now.getMonth(), formatAmount(total));
+    }
+
+    public void generatePreviousMonth() {
+        double total = 0.0;
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+        System.out.println("\nTransactions for the previous month (" + lastMonth.getMonth() + "):");
+        printTransactionHeader();
+
+        for (Transaction transaction : ledger) {
+            if (transaction.getDate().startsWith(lastMonth.getYear() + "-" + String.format("%02d", lastMonth.getMonthValue()))) {
+                System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
+                        formatDate(transaction.getDate()),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        formatAmount(transaction.getAmount()));
+                total += transaction.getAmount();
+            }
+        }
+
+        System.out.printf("\nTotal for Previous Month (%s): %s\n", lastMonth.getMonth(), formatAmount(total));
     }
 
     public void generateYearToDate() {
         double total = 0.0;
         int currentYear = LocalDate.now().getYear();
-        System.out.println("Transactions for the current year (" + currentYear + "):");
+        System.out.println("\nTransactions for the current year (" + currentYear + "):");
+        printTransactionHeader();
 
         for (Transaction transaction : ledger) {
             if (transaction.getDate().startsWith(String.valueOf(currentYear))) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
+                        formatDate(transaction.getDate()),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        formatAmount(transaction.getAmount()));
                 total += transaction.getAmount();
             }
         }
 
-        System.out.printf("Year-to-Date Total for %d: %.2f\n", currentYear, total);
+        System.out.printf("\nYear-to-Date Total for %d: %s\n", currentYear, formatAmount(total));
     }
-
     public void generatePreviousYear() {
         double total = 0.0;
         int previousYear = LocalDate.now().getYear() - 1;
-        System.out.println("Transactions for the previous year (" + previousYear + "):");
+        System.out.println("\nTransactions for the previous year (" + previousYear + "):");
+        printTransactionHeader();
 
         for (Transaction transaction : ledger) {
             if (transaction.getDate().startsWith(String.valueOf(previousYear))) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                System.out.printf("%-15s %-8s %-30s %-15s %-10s\n",
+                        formatDate(transaction.getDate()),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        formatAmount(transaction.getAmount()));
                 total += transaction.getAmount();
             }
         }
 
-        System.out.printf("Total for Previous Year (%d): %.2f\n", previousYear, total);
+        System.out.printf("\nTotal for Previous Year (%d): %s\n", previousYear, formatAmount(total));
     }
 
     // method for user to search by vendor input
