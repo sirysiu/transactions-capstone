@@ -119,35 +119,52 @@ public class TransactionApp {
         }
     }
     private static void displayTransaction() {
-        int size = transactions.size(); // grab the size of the transaction list
-        for (int i = size - 1; i >= 0; i--) { // reverse the order
+        int size = transactions.size();
+        System.out.printf("\n%-12s %-8s %-20s %-20s %-10s\n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("---------------------------------------------------------------");
+        for (int i = size - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
-            System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                    transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+            System.out.printf("%-12s %-8s %-20s %-20s %-10.2f\n",
+                    transaction.getDate(),
+                    transaction.getTime(),
+                    transaction.getDescription(),
+                    transaction.getVendor(),
+                    transaction.getAmount());
         }
-
     }
 
     private static void displayDeposits() {
-        System.out.println("Deposits:");
         int size = transactions.size();
-        for (int i = size - 1; i >= 0; i--) { // reverse the order with -1. decrement with i--
-            Transaction transaction = transactions.get(i); //transaction variable is assign the transaction array list
-            if (transaction.getAmount() > 0) {          // to find amount that are more than 0 or positive will only print out deposits
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.println("\nDeposits:");
+        System.out.printf("%-12s %-8s %-20s %-20s %-10s\n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("---------------------------------------------------------------");
+        for (int i = size - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+            if (transaction.getAmount() > 0) {
+                System.out.printf("%-12s %-8s %-20s %-20s %-10.2f\n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
             }
         }
     }
 
     private static void displayPayments() {
-        System.out.println("Payments:");
         int size = transactions.size();
+        System.out.println("\nPayments:");
+        System.out.printf("%-12s %-8s %-20s %-20s %-10s\n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("---------------------------------------------------------------");
         for (int i = size - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
             if (transaction.getAmount() < 0) {
-                System.out.printf("Date: %s, Time: %s, Description: %s, Vendor: %s, Amount: %.2f\n",
-                        transaction.getDate(), transaction.getTime(), transaction.getDescription(), transaction.getVendor(), transaction.getAmount());
+                System.out.printf("%-12s %-8s %-20s %-20s %-10.2f\n",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        transaction.getAmount());
             }
         }
     }
